@@ -1,0 +1,2 @@
+name startdate enddate length outer_diameter inner_diameter unit gas fix_time rock
+measurement_reactor_file1 27.01.2023 27.01.2023 0.14675 0.28945 0.1680 7 CO2 1 cement/casing
