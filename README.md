@@ -8,7 +8,7 @@ temperature-dependent material parameters. More details are available in the fol
 
 ## How to use it.
 
-In order to use the package there must be a measurement, a database and a measurement_units file in the following 
+In order to use the package there must be a measurement-, a database- and a measurement_units-file in the following 
 folder structure:
 ```
 Measurements
@@ -20,7 +20,10 @@ Measurements
 │   │   ...
 │   
 └───sim_data
-    │
+│   │   ...
+│   
+└───pics
+│   │   ...
 ```
 
 An example of the structure of the folders and the 3 files is given in the **example folder**. 
@@ -29,7 +32,7 @@ To evaluate a measurement, you can proceed as follows:
 ```sh
 from permmod import Measurement
 
-path = '/raw_data/measurement_file1.txt'
+path = 'raw_data/measurement_file1.txt'
 measurement = Measurement(path=path)
 measurement.calculate_permeability([1e-19, 0.001], parameter='both')
 ```

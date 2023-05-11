@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import CoolProp.CoolProp as cp
 from .import_data import Data, DataReaktor
 from .optimize import Optimizer
 from .plots import Plotter, PlotterReaktor
@@ -15,6 +16,19 @@ class Measurement:
         self.df_100 = None
         self.df_final = None
         self.sample_data = None
+
+    def guess_permeability(self):
+        self.set_data()
+        df = self.df_100
+        df['V'] = cp.PropsSI('VISCOSITY', 'T', df['Temperature'].to_list(), 'P', df['Outlet_Pressure'].to_list(),
+                             self.sample_data['gas'])
+        V = self.sample_data['inlet_chamber_volume']
+        L = self.sample_data['length']
+        A = self.sample_data['area']
+        df['k'] = - ((V * df['V'] * 2 * L * df['Inlet_Pressure'].diff()) /
+                     (A * (df['Inlet_Pressure'] ** 2 - df['Outlet_Pressure'] ** 2) * df['Duration'].diff()))
+        plot = Plotter(df)
+        plot.guess_chart()
 
     def calculate_permeability(self, guess, parameter='k'):
         if self.find_file():

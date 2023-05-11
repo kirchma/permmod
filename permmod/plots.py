@@ -9,6 +9,32 @@ class Plotter:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
+    def guess_chart(self):
+        fig = make_subplots(specs=[[{'secondary_y': True}]])
+        # Add traces
+        fig.add_trace(
+            go.Scatter(x=self.df['Duration'], y=self.df['Inlet_Pressure'] * 1e-6, name='Eingangsdruck',
+                       line_color='blue'),
+            secondary_y=False)
+        fig.add_trace(
+            go.Scatter(x=self.df['Duration'], y=self.df['Outlet_Pressure'] * 1e-6, name='Ausgangsdruck',
+                       line_color='blue'),
+            secondary_y=False)
+        fig.add_trace(
+            go.Scatter(x=self.df['Duration'],
+                       y=self.df['Inlet_Pressure'] * 1e-6 - self.df['Outlet_Pressure'] * 1e-6,
+                       name='Differenzdruck', line_color='black', line_dash='dot'),
+            secondary_y=False)
+        fig.add_trace(
+            go.Scatter(x=self.df['Duration'], y=self.df['k'], name='Permeabilität', line_color='red', mode='markers'),
+            secondary_y=True)
+
+        fig.update_layout(xaxis=dict(showexponent='all', exponentformat='power'))
+        fig.update_xaxes(title_text='Messdauer in s', type='log', range=[1, 6])
+        fig.update_yaxes(title_text='Druck in MPa', secondary_y=False)
+        fig.update_yaxes(title_text='Permeabilität', secondary_y=True, type='log')
+        fig.show()
+
     def raw_data_chart(self):
         fig = make_subplots(specs=[[{'secondary_y': True}]])
         # Add traces
